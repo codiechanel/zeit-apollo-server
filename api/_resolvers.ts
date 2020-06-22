@@ -1,5 +1,6 @@
 const cuid = require("cuid");
 const Parser = require("rss-parser");
+import { UserInputError } from 'apollo-server-micro'
 var xmlparser = require("fast-xml-parser");
 var he = require("he");
 var axios = require("axios");

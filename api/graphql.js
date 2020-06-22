@@ -2,7 +2,7 @@ import { news, rss, suggest } from "./_resolvers";
 
 const { ApolloServer } = require("apollo-server-micro");
 
-// const cors = require("micro-cors")();
+const cors = require("micro-cors")();
 
 // const typeDefs = require('./_typeDefs')
 // const resolvers = require("./_resolvers");
@@ -37,7 +37,7 @@ const server = new ApolloServer({
     pocketResolvers,
     raindropResolvers,
     crunchbaseResolvers,
-      npmResolvers
+    npmResolvers
   ),
   introspection: true,
   playground: true,
@@ -49,7 +49,9 @@ exports.config = {
   },
 };
 
-module.exports = (req, res, ...args) => {
+// module.exports
+
+const myHandler = (req, res, ...args) => {
   if (req.method === "OPTIONS") return res.status(200).send();
 
   const handler = server.createHandler();
@@ -62,3 +64,4 @@ module.exports = (req, res, ...args) => {
 
   return handler(req, res, ...args);
 };
+module.exports = cors(myHandler);
