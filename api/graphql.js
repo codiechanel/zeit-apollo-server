@@ -8,6 +8,7 @@ const { ApolloServer } = require("apollo-server-micro");
 // const resolvers = require("./_resolvers");
 import { merge } from "lodash";
 import { typeDef as Pocket, resolvers as pocketResolvers } from "./_Pocket";
+import { typeDef as Npm, resolvers as npmResolvers } from "./_Npm";
 import {
   typeDef as Raindrop,
   resolvers as raindropResolvers,
@@ -27,7 +28,7 @@ const Query = gql`
 `;
 const resolvers = {};
 
-let typeDefs = [Query, Pocket, Raindrop, Crunchbase];
+let typeDefs = [Query, Pocket, Raindrop, Crunchbase, Npm];
 
 const server = new ApolloServer({
   typeDefs,
@@ -35,7 +36,8 @@ const server = new ApolloServer({
     resolvers,
     pocketResolvers,
     raindropResolvers,
-    crunchbaseResolvers
+    crunchbaseResolvers,
+      npmResolvers
   ),
   introspection: true,
   playground: true,
