@@ -1,0 +1,24 @@
+{
+  "name": "zeit-apollo-server",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "now-deplot": "vercel --prod",
+    "now-dev": "vercel dev"
+  },
+  "dependencies": {
+    "apollo-server-micro": "^2.14.4",
+    "axios": "^0.19.2",
+    "cuid": "^2.1.8",
+    "fast-xml-parser": "^3.17.4",
+    "graphql": "^15.1.0",
+    "he": "^1.2.0",
+    "lodash": "^4.17.15",
+    "micro-cors": "^0.1.1",
+    "rss-parser": "^3.8.0",
+    "typescript": "^3.9.5"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.5"
+  }
+}
