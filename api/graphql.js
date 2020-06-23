@@ -1,4 +1,4 @@
-import { news, rss, suggest } from "./_resolvers";
+// import { news, rss, suggest } from "./_resolvers";
 
 const { ApolloServer } = require("apollo-server-micro");
 
@@ -9,6 +9,7 @@ const cors = require("micro-cors")();
 import { merge } from "lodash";
 import { typeDef as Pocket, resolvers as pocketResolvers } from "./_Pocket";
 import { typeDef as Npm, resolvers as npmResolvers } from "./_Npm";
+import { typeDef as Google, resolvers as googleResolvers } from "./_Google";
 import {
   typeDef as Raindrop,
   resolvers as raindropResolvers,
@@ -28,7 +29,7 @@ const Query = gql`
 `;
 const resolvers = {};
 
-let typeDefs = [Query, Pocket, Raindrop, Crunchbase, Npm];
+let typeDefs = [Query, Pocket, Raindrop, Crunchbase, Npm, Google];
 
 const server = new ApolloServer({
   typeDefs,
@@ -37,7 +38,8 @@ const server = new ApolloServer({
     pocketResolvers,
     raindropResolvers,
     crunchbaseResolvers,
-    npmResolvers
+    npmResolvers,
+    googleResolvers
   ),
   introspection: true,
   playground: true,
@@ -51,7 +53,7 @@ exports.config = {
 
 // module.exports
 
-const myHandler = (req, res, ...args) => {
+/*const myHandler = (req, res, ...args) => {
   if (req.method === "OPTIONS") return res.status(200).send();
 
   const handler = server.createHandler();
@@ -63,5 +65,5 @@ const myHandler = (req, res, ...args) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   return handler(req, res, ...args);
-};
-module.exports = cors(myHandler);
+};*/
+module.exports = cors(server.createHandler());

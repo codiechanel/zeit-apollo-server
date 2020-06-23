@@ -35,7 +35,7 @@ export async function downloadsLastMonth(_, { packageName }) {
 
     return data;
   } catch (e) {
-    throw new UserInputError("something went wrong ..", e.message);
+    throw new UserInputError("something went wrong .." + e.message);
   }
 }
 export async function downloads(_, { packageName, start, end }) {
@@ -46,6 +46,6 @@ export async function downloads(_, { packageName, start, end }) {
 
     return data;
   } catch (e) {
-    throw new UserInputError("something went wrong ..", e.message);
+    throw new UserInputError("something went wrong .." + e.message);
   }
 }
