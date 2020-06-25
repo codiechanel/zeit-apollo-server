@@ -53,7 +53,7 @@ exports.config = {
 
 // module.exports
 
-/*const myHandler = (req, res, ...args) => {
+const myHandler = (req, res, ...args) => {
   if (req.method === "OPTIONS") return res.status(200).send();
 
   const handler = server.createHandler();
@@ -65,5 +65,6 @@ exports.config = {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   return handler(req, res, ...args);
-};*/
-module.exports = cors(server.createHandler());
+};
+module.exports = cors(myHandler);
+// module.exports = cors(server.createHandler());
