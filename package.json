@@ -12,6 +12,7 @@
     "apollo-server-micro": "^2.14.4",
     "axios": "^0.19.2",
     "cuid": "^2.1.8",
+    "dayjs": "^1.8.29",
     "fast-xml-parser": "^3.17.4",
     "graphql": "^15.1.0",
     "he": "^1.2.0",
