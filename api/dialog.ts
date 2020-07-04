@@ -1,24 +1,27 @@
 import { fetchGoogleNews } from './_fetchGoogleNews'
 import { fetchCovidStats } from './_fetchCovidStats'
+import { fetchGithubTrendingWeekly } from './_fetchGithubTrending'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 
-function prepareCovid(items, msg) {
+function prepareGithub(items) {
   let list = []
   for (const x of items) {
     let item = {
-      title: x.Country,
+      title: x.name,
+      description: x.description,
       openUrlAction: {
-        url: 'https://www.example.com',
+        url: x.url,
       },
-      footer: x.NewConfirmed.toString(),
+      footer: x.stars.toString(),
     }
     list.push(item)
   }
-  console.log(list)
 
-  let richResponse = {
+  return list
+
+  /* let richResponse = {
     items: [
       {
         simpleResponse: {
@@ -32,12 +35,44 @@ function prepareCovid(items, msg) {
       },
     ],
   }
-  // console.log(richResponse)
 
-  return richResponse
+  return richResponse */
 }
 
-function convertJsonToCarousel(items, msg) {
+function prepareCovid(items) {
+  let list = []
+  for (const x of items) {
+    let item = {
+      title: x.Country,
+      openUrlAction: {
+        url: 'https://www.example.com',
+      },
+      footer: x.NewConfirmed.toString(),
+    }
+    list.push(item)
+  }
+
+  return list
+
+  /*  let richResponse = {
+    items: [
+      {
+        simpleResponse: {
+          textToSpeech: msg,
+        },
+      },
+      {
+        carouselBrowse: {
+          items: list,
+        },
+      },
+    ],
+  }
+
+  return richResponse */
+}
+
+function convertJsonToCarousel(items) {
   let list = []
   for (const x of items) {
     // @ts-ignore
@@ -59,7 +94,8 @@ function convertJsonToCarousel(items, msg) {
     }
     list.push(item)
   }
-  let richResponse = {
+  return list
+  /* let richResponse = {
     items: [
       {
         simpleResponse: {
@@ -73,15 +109,28 @@ function convertJsonToCarousel(items, msg) {
       },
     ],
   }
-  return richResponse
+  return richResponse */
 }
 
-function assembleResult(richResponse) {
+function assembleResult(list, msg) {
   let result = {
     payload: {
       google: {
         expectUserResponse: true,
-        richResponse,
+        richResponse: {
+          items: [
+            {
+              simpleResponse: {
+                textToSpeech: msg,
+              },
+            },
+            {
+              carouselBrowse: {
+                items: list,
+              },
+            },
+          ],
+        },
       },
     },
   }
@@ -93,22 +142,21 @@ module.exports = async (req, res) => {
 
   if (req.body?.originalDetectIntentRequest?.source === 'google') {
     let action = req.body?.queryResult?.action
-
+    console.log('its from google', action)
     // console.log(res)
 
     if (action === 'news.Search') {
       let topic =
         req.body?.queryResult?.parameters?.person?.name ??
         req.body?.queryResult?.parameters?.topic
-      console.log('its from google', action)
-      console.log('action', action, topic)
+
       let items = await fetchGoogleNews(topic)
 
       items = items.slice(0, 10)
       let msg = `here's the latest news on ${topic}`
 
-      let richResponse = convertJsonToCarousel(items, msg)
-      let result = assembleResult(richResponse)
+      let richResponse = convertJsonToCarousel(items)
+      let result = assembleResult(richResponse, msg)
 
       res.json(result)
     } else if (action === 'covid.stats') {
@@ -118,9 +166,17 @@ module.exports = async (req, res) => {
 
       // items = items.slice(0, 10)
       let msg = `here's the latest stats on covid`
-      let richResponse = prepareCovid(items, msg)
-      let result = assembleResult(richResponse)
-      console.log(result)
+      let richResponse = prepareCovid(items)
+      let result = assembleResult(richResponse, msg)
+
+      res.json(result)
+    } else if (action === 'github.trendingWeekly') {
+      let items = await fetchGithubTrendingWeekly()
+
+      // items = items.slice(0, 10)
+      let msg = `here's what's trending on github`
+      let richResponse = prepareGithub(items)
+      let result = assembleResult(richResponse, msg)
 
       res.json(result)
     } else {
