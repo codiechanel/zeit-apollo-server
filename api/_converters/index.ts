@@ -1,3 +1,6 @@
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 export function prepareGithub(items) {
   let list = []
   for (const x of items) {

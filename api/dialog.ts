@@ -1,28 +1,31 @@
-import { fetchGoogleNews } from './_fetchGoogleNews'
-import { fetchCovidStats } from './_fetchCovidStats'
-import { fetchGithubTrendingWeekly } from './_fetchGithubTrending'
+import { fetchGoogleNews } from './_services/_fetchGoogleNews'
+import { fetchCovidStats } from './_services/_fetchCovidStats'
+import { fetchGithubTrendingWeekly } from './_services/_fetchGithubTrending'
 import {
   assembleResult,
   prepareGithub,
   prepareCovid,
   convertJsonToCarousel,
 } from './_converters'
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-dayjs.extend(relativeTime)
 
 module.exports = async (req, res) => {
   // console.log(req.body)
 
-  if (req.body?.originalDetectIntentRequest?.source === 'google') {
-    let action = req.body?.queryResult?.action
+  if (
+    req.body.originalDetectIntentRequest &&
+    req.body.originalDetectIntentRequest.source === 'google'
+  ) {
+    let action = req.body.queryResult.action
     console.log('its from google', action)
     // console.log(res)
 
     if (action === 'news.Search') {
-      let topic =
-        req.body?.queryResult?.parameters?.person?.name ??
-        req.body?.queryResult?.parameters?.topic
+      let topic
+      if (req.body.queryResult.parameters.person) {
+        topic = req.body.queryResult.parameters.person.name
+      } else {
+        req.body.queryResult.parameters.topic
+      }
 
       let items = await fetchGoogleNews(topic)
 

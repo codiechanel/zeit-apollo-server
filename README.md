@@ -16,7 +16,7 @@ now dev
 "destination": "/api/graphql.js"
 }
 ]
-
+https://1fcc73e22b01.ngrok.io/api/dialog
 https://zeit-apollo-server.codie.vercel.app/api/dialog
 
 ```javascript
