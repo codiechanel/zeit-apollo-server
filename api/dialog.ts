@@ -1,7 +1,41 @@
 import { fetchGoogleNews } from './_fetchGoogleNews'
+import { fetchCovidStats } from './_fetchCovidStats'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
+
+function prepareCovid(items, msg) {
+  let list = []
+  for (const x of items) {
+    let item = {
+      title: x.Country,
+      openUrlAction: {
+        url: 'https://www.example.com',
+      },
+      footer: x.NewConfirmed.toString(),
+    }
+    list.push(item)
+  }
+  console.log(list)
+
+  let richResponse = {
+    items: [
+      {
+        simpleResponse: {
+          textToSpeech: msg,
+        },
+      },
+      {
+        carouselBrowse: {
+          items: list,
+        },
+      },
+    ],
+  }
+  // console.log(richResponse)
+
+  return richResponse
+}
 
 function convertJsonToCarousel(items, msg) {
   let list = []
@@ -55,16 +89,18 @@ function assembleResult(richResponse) {
 }
 
 module.exports = async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
 
   if (req.body?.originalDetectIntentRequest?.source === 'google') {
     let action = req.body?.queryResult?.action
-    console.log('its from google', action)
 
     // console.log(res)
 
-    if (action == 'news.Search') {
-      let topic = req.body.queryResult.parameters.topic.name
+    if (action === 'news.Search') {
+      let topic =
+        req.body?.queryResult?.parameters?.person?.name ??
+        req.body?.queryResult?.parameters?.topic
+      console.log('its from google', action)
       console.log('action', action, topic)
       let items = await fetchGoogleNews(topic)
 
@@ -73,6 +109,18 @@ module.exports = async (req, res) => {
 
       let richResponse = convertJsonToCarousel(items, msg)
       let result = assembleResult(richResponse)
+
+      res.json(result)
+    } else if (action === 'covid.stats') {
+      console.log(action)
+
+      let items = await fetchCovidStats()
+
+      // items = items.slice(0, 10)
+      let msg = `here's the latest stats on covid`
+      let richResponse = prepareCovid(items, msg)
+      let result = assembleResult(richResponse)
+      console.log(result)
 
       res.json(result)
     } else {
