@@ -9,3 +9,12 @@ yarn global add now
 yarn
 now dev
 ```
+
+"rewrites": [
+{
+"source": "/(.*)",
+"destination": "/api/graphql.js"
+}
+]
+
+https://zeit-apollo-server.codie.vercel.app/api/dialog
