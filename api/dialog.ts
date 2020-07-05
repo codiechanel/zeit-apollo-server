@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       if (req.body.queryResult.parameters.person) {
         topic = req.body.queryResult.parameters.person.name
       } else {
-        req.body.queryResult.parameters.topic
+        topic = req.body.queryResult.parameters.topic
       }
 
       let items = await fetchGoogleNews(topic)

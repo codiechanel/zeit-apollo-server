@@ -1,6 +1,9 @@
-/* import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-dayjs.extend(relativeTime) */
+/**
+ * fetchCovidStats
+ *
+ * @export
+ * @return {*}
+ */
 export async function fetchCovidStats() {
   const axios = require('axios')
   try {
