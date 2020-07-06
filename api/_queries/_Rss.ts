@@ -14,6 +14,7 @@ export const typeDef = gql`
     description: String
     link: String
     publishedParsed: String
+    image: String
   }
 `
 
@@ -27,9 +28,9 @@ export const resolvers = {
 }
 
 export async function cnn(x, { url }) {
-  console.log('hey man ')
+  // console.log('hey man ')
 
-  console.log(process.env.NODE_ENV, process.env.isprod)
+  // console.log(process.env.NODE_ENV, process.env.isprod)
 
   let json
 
@@ -42,6 +43,18 @@ export async function cnn(x, { url }) {
   }
 
   let { data } = json
+  let result = []
+  data.items.forEach((x) => {
+    console.log(x.extensions)
 
-  return data.items
+    if (x.extensions) {
+      let contentArr = x.extensions.media.group[0].children.content
+      let image = contentArr[contentArr.length - 1]
+      console.log(image.attrs.url)
+      x.image = image.attrs.url
+      result.push(x)
+    }
+  })
+
+  return result
 }

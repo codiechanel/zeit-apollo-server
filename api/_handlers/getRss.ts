@@ -1,4 +1,4 @@
-import { assembleResult, prepareCnnRss } from '../_converters'
+import { assembleResult, prepareCnnRss, prepareBasicRss } from '../_converters'
 import { fetchCnnRss } from '../_services/_fetchCnnRss'
 import { fetchRssBasic } from '../_services/_fetchRssBasic'
 export async function getRss() {
@@ -14,7 +14,7 @@ export async function getRssBasic(website, url) {
   let items = await fetchRssBasic(url)
 
   let msg = `here's the rss from ${website}`
-  let richResponse = prepareCnnRss(items)
+  let richResponse = prepareBasicRss(items)
   let result = assembleResult(richResponse, msg)
   return result
 }

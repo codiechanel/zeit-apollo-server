@@ -10,6 +10,7 @@ export async function fetchCnnRss() {
         description
         link
         publishedParsed
+        image
       }
     }
   }

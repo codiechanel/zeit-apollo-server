@@ -6,12 +6,33 @@ export function prepareCnnRss(items) {
   let list = []
 
   for (const x of items) {
-    // publishedParsed
-    // let dateFormatted = dayjs().from(dayjs(x.publishedParsed), true) + ' ago'
-    /*  let  title = "no title"
-    if (x.title) {
-      title = x.title
-    } */
+    let item: any = {
+      title: x.title,
+      // description: x.description,
+      openUrlAction: {
+        url: x.link,
+      },
+      image: {
+        url: x.image,
+        accessibilityText: 'Image alternate text',
+      },
+      footer: x.dateFormatted,
+    }
+    if (x.description) {
+      item.description = x.description
+    }
+    list.push(item)
+  }
+
+  // console.log(list)
+
+  return list
+}
+
+export function prepareBasicRss(items) {
+  let list = []
+
+  for (const x of items) {
     let item: any = {
       title: x.title,
       // description: x.description,
@@ -26,7 +47,7 @@ export function prepareCnnRss(items) {
     list.push(item)
   }
 
-  console.log(list)
+  // console.log(list)
 
   return list
 }
