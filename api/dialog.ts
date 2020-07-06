@@ -2,7 +2,7 @@ import { fetchCovidStats } from './_services/_fetchCovidStats'
 import { fetchGithubTrendingWeekly } from './_services/_fetchGithubTrending'
 import { assembleResult, prepareGithub, prepareCovid } from './_converters'
 
-import { getRss } from './_handlers/getRss'
+import { getRss, getRssBasic } from './_handlers/getRss'
 import { googleNews } from './_handlers/googleNews'
 
 module.exports = async (req, res) => {
@@ -21,13 +21,26 @@ module.exports = async (req, res) => {
 
       res.json(result)
     } else if (action === 'get-rss') {
-      console.log('action', action)
+      let rssMap = new Map()
+      rssMap.set(
+        'new york times',
+        'http://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml'
+      )
+      rssMap.set('hacker news', 'https://news.ycombinator.com/rss')
+      rssMap.set('cnn', 'http://rss.cnn.com/rss/edition.rss')
+      rssMap.set('gsmarena', 'https://www.gsmarena.com/rss-news-reviews.php3')
 
-      let result = await getRss(res)
-      res.json(result)
+      let website = req.body.queryResult.parameters.website
+
+      if (website === 'cnn') {
+        let result = await getRss()
+        res.json(result)
+      } else {
+        let url = rssMap.get(website)
+        let result = await getRssBasic(website, url)
+        res.json(result)
+      }
     } else if (action === 'covid.stats') {
-      console.log(action)
-
       let items = await fetchCovidStats()
 
       let msg = `here's the latest stats on covid`
