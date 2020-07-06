@@ -11,6 +11,7 @@ import {
   typeDef as Pocket,
   resolvers as pocketResolvers,
 } from './_queries/_Pocket'
+import { typeDef as Rss, resolvers as rssResolvers } from './_queries/_Rss'
 import { typeDef as Npm, resolvers as npmResolvers } from './_queries/_Npm'
 import {
   typeDef as Google,
@@ -35,7 +36,7 @@ const Query = gql`
 `
 const resolvers = {}
 
-let typeDefs = [Query, Pocket, Raindrop, Crunchbase, Npm, Google]
+let typeDefs = [Query, Pocket, Raindrop, Crunchbase, Npm, Google, Rss]
 
 const server = new ApolloServer({
   typeDefs,
@@ -45,7 +46,8 @@ const server = new ApolloServer({
     raindropResolvers,
     crunchbaseResolvers,
     npmResolvers,
-    googleResolvers
+    googleResolvers,
+    rssResolvers
   ),
   introspection: true,
   playground: true,
