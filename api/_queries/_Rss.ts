@@ -8,6 +8,7 @@ export const typeDef = gql`
   }
   type Rss {
     cnn(url: String): [CnnRssItem]
+    basic(url: String): [BasicRssItem]
   }
   type CnnRssItem {
     title: String
@@ -15,6 +16,12 @@ export const typeDef = gql`
     link: String
     publishedParsed: String
     image: String
+  }
+  type BasicRssItem {
+    title: String
+    description: String
+    link: String
+    publishedParsed: String
   }
 `
 
@@ -24,7 +31,28 @@ export const resolvers = {
   },
   Rss: {
     cnn,
+    basic,
   },
+}
+
+export async function basic(x, { url }) {
+  // console.log('hey man ')
+
+  // console.log(process.env.NODE_ENV, process.env.isprod)
+
+  let json
+
+  if (process.env.NODE_ENV === 'production') {
+    json = await axios.get(
+      `https://zeit-apollo-server.codie.vercel.app/api/parse-rss?url=${url}`
+    )
+  } else {
+    json = await axios.get(`http://localhost:3000/api/parse-rss?url=${url}`)
+  }
+
+  let { data } = json
+
+  return data.items
 }
 
 export async function cnn(x, { url }) {

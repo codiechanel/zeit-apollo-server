@@ -37,6 +37,8 @@ module.exports = async (req, res) => {
         res.json(result)
       } else {
         let url = rssMap.get(website)
+        console.log('fetching', website)
+
         let result = await getRssBasic(website, url)
         res.json(result)
       }

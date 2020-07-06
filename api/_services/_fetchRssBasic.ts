@@ -5,7 +5,7 @@ dayjs.extend(relativeTime)
 export async function fetchRssBasic(url) {
   let query = `{
     Rss {
-      cnn(url: "${url}") {
+      basic(url: "${url}") {
         title
         description
         link
@@ -23,7 +23,7 @@ export async function fetchRssBasic(url) {
       }
     )
 
-    let items = data.data.Rss.cnn
+    let items = data.data.Rss.basic
     // console.log(items)
 
     let result = []
