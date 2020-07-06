@@ -78,7 +78,7 @@ export async function cnn(x, { url }) {
   }
 
   let { data } = json
-  let result = []
+  let tmpRes = []
   data.items.forEach((x) => {
     console.log(x.extensions)
 
@@ -87,9 +87,17 @@ export async function cnn(x, { url }) {
       let image = contentArr[contentArr.length - 1]
       console.log(image.attrs.url)
       x.image = image.attrs.url
-      result.push(x)
+      tmpRes.push(x)
     }
   })
+
+  let result
+
+  if (x.limit) {
+    result = tmpRes.slice(0, x.limit)
+  } else {
+    result = tmpRes
+  }
 
   return result
 }
