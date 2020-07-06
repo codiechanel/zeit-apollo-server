@@ -5,8 +5,11 @@ import {
   assembleResult,
   prepareGithub,
   prepareCovid,
-  convertJsonToCarousel,
+  prepareCnnRss,
+  prepareGoogleNews,
 } from './_converters'
+
+import { fetchCnnRss } from './_services/_fetchCnnRss'
 
 module.exports = async (req, res) => {
   // console.log(req.body)
@@ -32,7 +35,22 @@ module.exports = async (req, res) => {
       items = items.slice(0, 10)
       let msg = `here's the latest news on ${topic}`
 
-      let richResponse = convertJsonToCarousel(items)
+      let richResponse = prepareGoogleNews(items)
+      let result = assembleResult(richResponse, msg)
+
+      res.json(result)
+    } else if (action === 'get-rss') {
+      console.log('action', action)
+
+      let items = await fetchCnnRss()
+
+      items = items.slice(0, 10)
+
+      // console.log(items)
+
+      // items = items.slice(0, 10)
+      let msg = `here's the rss from cnn`
+      let richResponse = prepareCnnRss(items)
       let result = assembleResult(richResponse, msg)
 
       res.json(result)
