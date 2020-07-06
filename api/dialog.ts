@@ -5,11 +5,10 @@ import {
   assembleResult,
   prepareGithub,
   prepareCovid,
-  prepareCnnRss,
   prepareGoogleNews,
 } from './_converters'
 
-import { fetchCnnRss } from './_services/_fetchCnnRss'
+import { getRss } from './_handlers/getRss'
 
 module.exports = async (req, res) => {
   // console.log(req.body)
@@ -42,17 +41,7 @@ module.exports = async (req, res) => {
     } else if (action === 'get-rss') {
       console.log('action', action)
 
-      let items = await fetchCnnRss()
-
-      items = items.slice(0, 10)
-
-      // console.log(items)
-
-      // items = items.slice(0, 10)
-      let msg = `here's the rss from cnn`
-      let richResponse = prepareCnnRss(items)
-      let result = assembleResult(richResponse, msg)
-
+      let result = await getRss(res)
       res.json(result)
     } else if (action === 'covid.stats') {
       console.log(action)
