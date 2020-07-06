@@ -6,7 +6,7 @@
     "ngrok": "ngrok http 3000",
     "ngrok-save": "ngrok authtoken 4QR6UvaohbPgoJzgttb19_3P2xhXuPenf9EKAy1j6i3",
     "now-deplot": "vercel --prod",
-    "now-dev": "cross-env NODE_ENV=dev1 && vercel dev -d"
+    "now-dev": "cross-env NODE_ENV=dev1 && vercel dev"
   },
   "dependencies": {
     "apollo-server-micro": "^2.14.4",

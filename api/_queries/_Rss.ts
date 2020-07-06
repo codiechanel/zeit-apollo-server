@@ -4,7 +4,7 @@ import { gql } from 'apollo-server-micro'
 import { emptyResolver } from './_util'
 export const typeDef = gql`
   extend type Query {
-    Rss: Rss
+    Rss(limit: Int = 10): Rss
   }
   type Rss {
     cnn(url: String): [CnnRssItem]
@@ -36,7 +36,7 @@ export const resolvers = {
 }
 
 export async function basic(x, { url }) {
-  // console.log('hey man ')
+  console.log('hey man ', x)
 
   // console.log(process.env.NODE_ENV, process.env.isprod)
 
@@ -51,8 +51,15 @@ export async function basic(x, { url }) {
   }
 
   let { data } = json
+  let result
 
-  return data.items
+  if (x.limit) {
+    result = data.items.slice(0, x.limit)
+  } else {
+    result = data.items
+  }
+
+  return result
 }
 
 export async function cnn(x, { url }) {
