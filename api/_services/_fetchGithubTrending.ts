@@ -13,9 +13,6 @@ export async function fetchGithubTrendingWeekly() {
     })
 
     let items = data.slice(0, 10)
-    // NewConfirmed
-
-    // console.log(items)
 
     return items
   } catch (e) {

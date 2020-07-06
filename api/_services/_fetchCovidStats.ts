@@ -16,9 +16,6 @@ export async function fetchCovidStats() {
     })
 
     items = items.slice(0, 10)
-    // NewConfirmed
-
-    // console.log(items)
 
     return items
   } catch (e) {

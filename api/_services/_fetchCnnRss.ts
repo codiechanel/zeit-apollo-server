@@ -40,6 +40,8 @@ export async function fetchCnnRss() {
       return b.unixTimestamp - a.unixTimestamp
     })
 
+    result = result.slice(0, 10)
+
     return result
   } catch (e) {
     console.log(e.message)
